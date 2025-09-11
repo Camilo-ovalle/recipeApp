@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./gradlew:*)",
+      "Read(//mnt/c/Users/tecon/AppData/Local/Android/**)",
+      "Bash(export:*)",
+      "Read(//home/camiloco3/**)",
+      "Bash(source:*)",
+      "Bash(adb:*)",
+      "Bash(\"/mnt/c/Users/tecon/AppData/Local/Android/Sdk/platform-tools/adb.exe\" version)",
+      "Bash(\"/mnt/c/Users/tecon/AppData/Local/Android/Sdk/emulator/emulator.exe\" -list-avds)",
+      "Bash(\"/mnt/c/Users/tecon/AppData/Local/Android/Sdk/platform-tools/adb.exe\" devices)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

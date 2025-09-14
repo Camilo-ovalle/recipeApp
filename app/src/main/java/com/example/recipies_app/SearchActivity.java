@@ -48,6 +48,6 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void performSearch(String query) {
-        // TODO: Implement search functionality
+
     }
 }

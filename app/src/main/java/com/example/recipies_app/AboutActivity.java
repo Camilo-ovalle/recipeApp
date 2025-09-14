@@ -18,7 +18,7 @@ public class AboutActivity extends AppCompatActivity {
 
         initViews();
         setupClickListeners();
-        setupAppInfo();
+        //setupAppInfo();
     }
 
     private void initViews() {

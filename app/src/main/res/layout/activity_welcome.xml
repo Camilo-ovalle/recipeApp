@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_white">
@@ -32,74 +33,58 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Descubre miles de recetas deliciosas, guarda tus favoritas y crea tu propia colección de platillos especiales."
+            android:text="Inicia sesión para acceder a todas las funciones de RecipeApp."
             android:textSize="16sp"
             android:textColor="@color/text_secondary"
             android:gravity="center"
             android:lineSpacingExtra="4dp"
-            android:layout_marginBottom="48dp" />
+            android:layout_marginBottom="32dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="24dp">
+            android:orientation="vertical"
+            android:layout_marginBottom="32dp">
 
-            <LinearLayout
-                android:layout_width="0dp"
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center_horizontal"
-                android:layout_marginEnd="16dp">
+                android:layout_marginBottom="16dp"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
-                <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:src="@drawable/ic_search_recipes"
-                    android:layout_marginBottom="8dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_username"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Buscar Recetas"
-                    android:textSize="14sp"
-                    android:textColor="@color/text_primary"
-                    android:gravity="center" />
+                    android:hint="Usuario"
+                    android:inputType="text"
+                    android:textSize="16sp" />
 
-            </LinearLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <LinearLayout
-                android:layout_width="0dp"
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center_horizontal"
-                android:layout_marginStart="16dp">
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                app:passwordToggleEnabled="true">
 
-                <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:src="@drawable/ic_favorite_recipes"
-                    android:layout_marginBottom="8dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_password"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Guardar Favoritas"
-                    android:textSize="14sp"
-                    android:textColor="@color/text_primary"
-                    android:gravity="center" />
+                    android:hint="Contraseña"
+                    android:inputType="textPassword"
+                    android:textSize="16sp" />
 
-            </LinearLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
 
         <Button
-            android:id="@+id/btn_get_started"
+            android:id="@+id/btn_login"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:text="Comenzar"
+            android:text="Iniciar Sesión"
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@color/white"
@@ -109,13 +94,13 @@
 
         <Button
             android:id="@+id/btn_skip"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:text="Omitir"
-            android:textSize="14sp"
-            android:textColor="@color/primary_orange"
             android:background="@drawable/btn_transparent"
-            style="?android:attr/borderlessButtonStyle" />
+            android:text="Registrarse"
+            android:textColor="@color/primary_orange"
+            android:textSize="14sp" />
 
     </LinearLayout>
 

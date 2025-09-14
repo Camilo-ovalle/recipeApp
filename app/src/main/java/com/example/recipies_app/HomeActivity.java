@@ -64,7 +64,5 @@ public class HomeActivity extends AppCompatActivity {
     private void setupRecyclerViews() {
         rvFeaturedRecipes.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         rvRecentRecipes.setLayoutManager(new LinearLayoutManager(this));
-        
-        // TODO: Setup adapters with sample data
     }
 }

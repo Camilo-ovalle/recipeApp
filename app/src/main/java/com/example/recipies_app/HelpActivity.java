@@ -72,12 +72,6 @@ public class HelpActivity extends AppCompatActivity {
             }
         });
 
-        llReportProblem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                reportProblem();
-            }
-        });
     }
 
     private void callTechnicalSupport() {
@@ -92,30 +86,13 @@ public class HelpActivity extends AppCompatActivity {
 
     private void openChatBot() {
         Toast.makeText(this, "Abriendo Chat Bot de RecipeApp...", Toast.LENGTH_SHORT).show();
-        // Aquí se podría implementar un chat bot real o navegar a una actividad de chat
-        // Por ahora solo mostramos un mensaje
     }
 
     private void showFAQ() {
         Toast.makeText(this, "Preguntas Frecuentes", Toast.LENGTH_SHORT).show();
-        // Aquí se podría navegar a una actividad de FAQ
     }
 
     private void showTutorials() {
         Toast.makeText(this, "Tutoriales de la aplicación", Toast.LENGTH_SHORT).show();
-        // Aquí se podría navegar a una actividad de tutoriales
-    }
-
-    private void reportProblem() {
-        Intent intent = new Intent(Intent.ACTION_SENDTO);
-        intent.setData(Uri.parse("mailto:soporte@recipeapp.com"));
-        intent.putExtra(Intent.EXTRA_SUBJECT, "Reporte de Problema - RecipeApp");
-        intent.putExtra(Intent.EXTRA_TEXT, "Describe el problema que encontraste:\n\n");
-        
-        try {
-            startActivity(Intent.createChooser(intent, "Enviar reporte"));
-        } catch (Exception e) {
-            Toast.makeText(this, "No se puede enviar el email", Toast.LENGTH_SHORT).show();
-        }
     }
 }

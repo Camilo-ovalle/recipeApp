@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -13,6 +14,8 @@ public class ProfileActivity extends AppCompatActivity {
     private LinearLayout llSettings;
     private LinearLayout llHelp;
     private LinearLayout llAbout;
+    private TextView tvUserName;
+    private TextView tvUserInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +23,7 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 
         initViews();
+        loadUserData();
         setupClickListeners();
     }
 
@@ -29,6 +33,34 @@ public class ProfileActivity extends AppCompatActivity {
         llSettings = findViewById(R.id.ll_settings);
         llHelp = findViewById(R.id.ll_help);
         llAbout = findViewById(R.id.ll_about);
+        tvUserName = findViewById(R.id.tv_user_name);
+        tvUserInfo = findViewById(R.id.tv_user_info);
+    }
+
+    private void loadUserData() {
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra("nombre")) {
+            String nombre = intent.getStringExtra("nombre");
+            String apellido = intent.getStringExtra("apellido");
+            String edad = intent.getStringExtra("edad");
+            String objetivo = intent.getStringExtra("objetivo");
+            String pesoActual = intent.getStringExtra("pesoActual");
+            String altura = intent.getStringExtra("altura");
+            String fechaNacimiento = intent.getStringExtra("fechaNacimiento");
+
+            // Actualizar nombre completo
+            String nombreCompleto = nombre + " " + apellido;
+            tvUserName.setText(nombreCompleto);
+
+            // Actualizar información del usuario
+            String infoUsuario = "";
+            if (fechaNacimiento != null && !fechaNacimiento.isEmpty()) {
+                infoUsuario = fechaNacimiento + " • " + objetivo;
+            } else {
+                infoUsuario = edad + " años • " + objetivo;
+            }
+            tvUserInfo.setText(infoUsuario);
+        }
     }
 
     private void setupClickListeners() {

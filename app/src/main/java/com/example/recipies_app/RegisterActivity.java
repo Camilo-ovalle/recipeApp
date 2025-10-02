@@ -1,5 +1,6 @@
 package com.example.recipies_app;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -17,16 +18,16 @@ import org.json.JSONObject;
 import java.io.FileOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.UUID;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private EditText etNombre, etApellido, etEdad, etDocumento, etTelefono, etPesoActual, etAltura, etPassword, etConfirmPassword;
+    private EditText etNombre, etApellido, etEdad, etDocumento, etTelefono, etPesoActual, etAltura, etPassword, etConfirmPassword, etFechaNacimiento;
     private Spinner spObjetivo;
     private Button btnRegistrar, btnVolver;
     private ImageView btnBack;
-
-    private DatePicker calendarDate;
+    private Calendar calendarioSeleccionado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,11 +49,13 @@ public class RegisterActivity extends AppCompatActivity {
         etConfirmPassword = findViewById(R.id.et_confirm_password);
         etPesoActual = findViewById(R.id.et_peso_actual);
         etAltura = findViewById(R.id.et_altura);
+        etFechaNacimiento = findViewById(R.id.et_fecha_nacimiento);
         spObjetivo = findViewById(R.id.sp_objetivo);
         btnRegistrar = findViewById(R.id.btn_registrar);
         btnVolver = findViewById(R.id.btn_volver);
         btnBack = findViewById(R.id.btn_back);
-        calendarDate = findViewById(R.id.datePicker);
+
+        calendarioSeleccionado = Calendar.getInstance();
     }
 
     private void setupSpinner() {
@@ -92,6 +95,40 @@ public class RegisterActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        etFechaNacimiento.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mostrarDatePicker();
+            }
+        });
+    }
+
+    private void mostrarDatePicker() {
+        int year = calendarioSeleccionado.get(Calendar.YEAR);
+        int month = calendarioSeleccionado.get(Calendar.MONTH);
+        int day = calendarioSeleccionado.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+            RegisterActivity.this,
+            new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                    calendarioSeleccionado.set(Calendar.YEAR, year);
+                    calendarioSeleccionado.set(Calendar.MONTH, monthOfYear);
+                    calendarioSeleccionado.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                    String fechaSeleccionada = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
+                    etFechaNacimiento.setText(fechaSeleccionada);
+                }
+            },
+            year, month, day
+        );
+
+        // Establecer fecha máxima como hoy (no puede nacer en el futuro)
+        datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+
+        datePickerDialog.show();
     }
 
     private void registrarUsuario() {
@@ -122,8 +159,17 @@ public class RegisterActivity extends AppCompatActivity {
             // Verificar contenido del archivo
             verificarContenidoArchivo();
 
-            // Navegar a HomeActivity después del registro exitoso
-            Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
+            // Navegar a ProfileActivity después del registro exitoso con datos del usuario
+            Intent intent = new Intent(RegisterActivity.this, ProfileActivity.class);
+            intent.putExtra("nombre", etNombre.getText().toString().trim());
+            intent.putExtra("apellido", etApellido.getText().toString().trim());
+            intent.putExtra("edad", etEdad.getText().toString().trim());
+            intent.putExtra("documento", etDocumento.getText().toString().trim());
+            intent.putExtra("telefono", etTelefono.getText().toString().trim());
+            intent.putExtra("pesoActual", etPesoActual.getText().toString().trim());
+            intent.putExtra("altura", etAltura.getText().toString().trim());
+            intent.putExtra("objetivo", spObjetivo.getSelectedItem().toString());
+            intent.putExtra("fechaNacimiento", etFechaNacimiento.getText().toString().trim());
             startActivity(intent);
             finish();
 
@@ -201,6 +247,12 @@ public class RegisterActivity extends AppCompatActivity {
 
         if (spObjetivo.getSelectedItemPosition() == 0) {
             Toast.makeText(this, "Por favor selecciona un objetivo", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (etFechaNacimiento.getText().toString().trim().isEmpty()) {
+            etFechaNacimiento.setError("Campo requerido");
+            etFechaNacimiento.requestFocus();
             return false;
         }
 

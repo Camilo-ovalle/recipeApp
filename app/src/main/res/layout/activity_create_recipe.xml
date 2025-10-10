@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_light"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="32dp">
+
+            <ImageView
+                android:id="@+id/iv_back"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_arrow_back"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:padding="4dp"
+                android:layout_marginEnd="16dp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Crear Receta"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary"
+                android:gravity="center" />
+
+        </LinearLayout>
+
+        <!-- Formulario de Receta -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/background_card"
+            android:padding="24dp"
+            android:layout_marginBottom="24dp">
+
+            <!-- Nombre de la Receta -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Información Básica"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/primary_orange"
+                android:layout_marginBottom="16dp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:hint="Nombre de la receta"
+                app:boxStrokeColor="@color/primary_orange"
+                app:hintTextColor="@color/primary_orange">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_recipe_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords"
+                    android:textColor="@color/text_primary" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Descripción -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:hint="Descripción"
+                app:boxStrokeColor="@color/primary_orange"
+                app:hintTextColor="@color/primary_orange">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_recipe_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:minLines="3"
+                    android:gravity="top"
+                    android:textColor="@color/text_primary" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Tiempo de Cocción -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:hint="Tiempo de cocción (ej: 30 min)"
+                app:boxStrokeColor="@color/primary_orange"
+                app:hintTextColor="@color/primary_orange">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_cook_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:textColor="@color/text_primary" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Sección de Alimentos -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Alimentos"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/primary_orange"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Lista de Alimentos -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="16dp">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_food_items"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:minHeight="100dp" />
+
+                <!-- Formulario para añadir alimento -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="8dp">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="8dp"
+                        android:hint="Alimento"
+                        app:boxStrokeColor="@color/primary_orange"
+                        app:hintTextColor="@color/primary_orange">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_food_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textCapWords"
+                            android:textColor="@color/text_primary" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:hint="Calorías"
+                        app:boxStrokeColor="@color/primary_orange"
+                        app:hintTextColor="@color/primary_orange">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_food_calories"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:textColor="@color/text_primary" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btn_add_food"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:text="+ Añadir Alimento"
+                    android:textColor="@color/primary_orange"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/button_transparent"
+                    android:layout_marginBottom="16dp" />
+
+            </LinearLayout>
+
+            <!-- Total de Calorías -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/background_card"
+                android:padding="16dp"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="24dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_calories"
+                    android:layout_marginEnd="12dp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Total de Calorías"
+                    android:textSize="16sp"
+                    android:textColor="@color/text_primary"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_total_calories"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0 cal"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/primary_orange" />
+
+            </LinearLayout>
+
+            <!-- Categorías con Checkboxes -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Categorías"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/primary_orange"
+                android:layout_marginBottom="16dp" />
+
+            <CheckBox
+                android:id="@+id/cb_breakfast"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Desayuno"
+                android:textSize="16sp"
+                android:textColor="@color/text_primary"
+                android:buttonTint="@color/primary_orange"
+                android:padding="12dp"
+                android:layout_marginBottom="8dp" />
+
+            <CheckBox
+                android:id="@+id/cb_lunch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Almuerzo"
+                android:textSize="16sp"
+                android:textColor="@color/text_primary"
+                android:buttonTint="@color/primary_orange"
+                android:padding="12dp"
+                android:layout_marginBottom="8dp" />
+
+            <CheckBox
+                android:id="@+id/cb_dinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cena"
+                android:textSize="16sp"
+                android:textColor="@color/text_primary"
+                android:buttonTint="@color/primary_orange"
+                android:padding="12dp" />
+
+        </LinearLayout>
+
+        <!-- Botón Guardar -->
+        <Button
+            android:id="@+id/btn_save_recipe"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Guardar Receta"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:background="@drawable/button_primary_orange"
+            android:elevation="4dp" />
+
+    </LinearLayout>
+
+</ScrollView>

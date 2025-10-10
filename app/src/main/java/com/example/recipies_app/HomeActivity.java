@@ -3,6 +3,7 @@ package com.example.recipies_app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +16,7 @@ public class HomeActivity extends AppCompatActivity {
     private RecyclerView rvRecentRecipes;
     private ImageView ivSearch;
     private ImageView ivProfile;
+    private Button btnNewRecipe;
     private LinearLayout llBreakfastCategory;
 
     @Override
@@ -32,10 +34,19 @@ public class HomeActivity extends AppCompatActivity {
         rvRecentRecipes = findViewById(R.id.rv_recent_recipes);
         ivSearch = findViewById(R.id.iv_search);
         ivProfile = findViewById(R.id.iv_profile);
+        btnNewRecipe = findViewById(R.id.btn_new_recipe);
         llBreakfastCategory = findViewById(R.id.ll_breakfast_category);
     }
 
     private void setupClickListeners() {
+        btnNewRecipe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, CreateRecipeActivity.class);
+                startActivity(intent);
+            }
+        });
+
         ivSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

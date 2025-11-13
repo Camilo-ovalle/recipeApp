@@ -3,6 +3,7 @@ package com.example.recipies_app;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -12,19 +13,20 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import java.io.FileOutputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
+
+import com.example.recipies_app.api.ApiResponse;
+import com.example.recipies_app.api.RetrofitClient;
+
 import java.util.Calendar;
-import java.util.UUID;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private EditText etNombre, etApellido, etEdad, etDocumento, etTelefono, etPesoActual, etAltura, etPassword, etConfirmPassword, etFechaNacimiento;
-    private Spinner spObjetivo;
+    private EditText etNombre, etApellido, etEmail, etTelefono, etPassword, etConfirmPassword, etFechaNacimiento;
+    private Spinner spGenero;
     private Button btnRegistrar, btnVolver;
     private ImageView btnBack;
     private Calendar calendarioSeleccionado;
@@ -42,15 +44,12 @@ public class RegisterActivity extends AppCompatActivity {
     private void initViews() {
         etNombre = findViewById(R.id.et_nombre);
         etApellido = findViewById(R.id.et_apellido);
-        etEdad = findViewById(R.id.et_edad);
-        etDocumento = findViewById(R.id.et_documento);
+        etEmail = findViewById(R.id.et_email);
         etTelefono = findViewById(R.id.et_telefono);
         etPassword = findViewById(R.id.et_password);
         etConfirmPassword = findViewById(R.id.et_confirm_password);
-        etPesoActual = findViewById(R.id.et_peso_actual);
-        etAltura = findViewById(R.id.et_altura);
         etFechaNacimiento = findViewById(R.id.et_fecha_nacimiento);
-        spObjetivo = findViewById(R.id.sp_objetivo);
+        spGenero = findViewById(R.id.sp_genero);
         btnRegistrar = findViewById(R.id.btn_registrar);
         btnVolver = findViewById(R.id.btn_volver);
         btnBack = findViewById(R.id.btn_back);
@@ -59,19 +58,18 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void setupSpinner() {
-        String[] objetivos = {
-            "Seleccionar objetivo",
-            "Perder peso",
-            "Mantener peso",
-            "Ganar peso",
-            "Ganar masa muscular",
-            "Mejorar salud general"
+        // Spinner de Género
+        String[] generos = {
+            "Seleccionar género",
+            "Masculino",
+            "Femenino",
+            "Otro"
         };
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-            android.R.layout.simple_spinner_item, objetivos);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spObjetivo.setAdapter(adapter);
+        ArrayAdapter<String> adapterGeneros = new ArrayAdapter<>(this,
+            android.R.layout.simple_spinner_item, generos);
+        adapterGeneros.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spGenero.setAdapter(adapterGeneros);
     }
 
     private void setupClickListeners() {
@@ -118,7 +116,10 @@ public class RegisterActivity extends AppCompatActivity {
                     calendarioSeleccionado.set(Calendar.MONTH, monthOfYear);
                     calendarioSeleccionado.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                    String fechaSeleccionada = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
+                    // Formato YYYY-MM-DD para la API
+                    String mes = String.format("%02d", monthOfYear + 1);
+                    String dia = String.format("%02d", dayOfMonth);
+                    String fechaSeleccionada = year + "-" + mes + "-" + dia;
                     etFechaNacimiento.setText(fechaSeleccionada);
                 }
             },
@@ -136,79 +137,100 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        try {
-            JSONObject usuario = new JSONObject();
-            usuario.put("id", UUID.randomUUID().toString());
-            usuario.put("nombre", etNombre.getText().toString().trim());
-            usuario.put("apellido", etApellido.getText().toString().trim());
-            usuario.put("edad", Integer.parseInt(etEdad.getText().toString().trim()));
-            usuario.put("documento", etDocumento.getText().toString().trim());
-            usuario.put("telefono", etTelefono.getText().toString().trim());
-            usuario.put("password", etPassword.getText().toString().trim());
-            usuario.put("pesoActual", Float.parseFloat(etPesoActual.getText().toString().trim()));
-            usuario.put("altura", Float.parseFloat(etAltura.getText().toString().trim()));
-            usuario.put("objetivo", spObjetivo.getSelectedItem().toString());
-            usuario.put("fechaRegistro", System.currentTimeMillis());
+        // Crear objeto User para enviar a la API
+        User nuevoUsuario = new User();
+        nuevoUsuario.setNombre(etNombre.getText().toString().trim());
+        nuevoUsuario.setApellido(etApellido.getText().toString().trim());
+        nuevoUsuario.setEmail(etEmail.getText().toString().trim());
+        nuevoUsuario.setTelefono(etTelefono.getText().toString().trim());
+        nuevoUsuario.setPassword(etPassword.getText().toString().trim());
+        nuevoUsuario.setFechaNacimiento(etFechaNacimiento.getText().toString().trim());
+        nuevoUsuario.setGenero(spGenero.getSelectedItem().toString());
 
-            guardarUsuarioEnArchivo(usuario);
+        Toast.makeText(this, "Registrando usuario...", Toast.LENGTH_SHORT).show();
 
-            // Mostrar ruta del archivo para debug
-            String filePath = this.getFilesDir().getAbsolutePath() + "/data.json";
-            Toast.makeText(this, "Archivo guardado en: " + filePath, Toast.LENGTH_SHORT).show();
+        // Llamada a la API
+        Call<ApiResponse<User>> call = RetrofitClient.getInstance()
+                .getApiService()
+                .registerUser(nuevoUsuario);
 
-            // Verificar contenido del archivo
-            verificarContenidoArchivo();
+        call.enqueue(new Callback<ApiResponse<User>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<User>> call, Response<ApiResponse<User>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    ApiResponse<User> apiResponse = response.body();
 
-            // Navegar a ProfileActivity después del registro exitoso con datos del usuario
-            Intent intent = new Intent(RegisterActivity.this, ProfileActivity.class);
-            intent.putExtra("nombre", etNombre.getText().toString().trim());
-            intent.putExtra("apellido", etApellido.getText().toString().trim());
-            intent.putExtra("edad", etEdad.getText().toString().trim());
-            intent.putExtra("documento", etDocumento.getText().toString().trim());
-            intent.putExtra("telefono", etTelefono.getText().toString().trim());
-            intent.putExtra("pesoActual", etPesoActual.getText().toString().trim());
-            intent.putExtra("altura", etAltura.getText().toString().trim());
-            intent.putExtra("objetivo", spObjetivo.getSelectedItem().toString());
-            intent.putExtra("fechaNacimiento", etFechaNacimiento.getText().toString().trim());
-            startActivity(intent);
-            finish();
+                    if (apiResponse.isSuccess() && apiResponse.getData() != null) {
+                        User usuarioRegistrado = apiResponse.getData();
 
-        } catch (JSONException | NumberFormatException e) {
-            Toast.makeText(this, "Error al procesar los datos", Toast.LENGTH_SHORT).show();
-        }
+                        Toast.makeText(RegisterActivity.this,
+                                "¡Registro exitoso! Bienvenido " + usuarioRegistrado.getNombre(),
+                                Toast.LENGTH_LONG).show();
+
+                        // Navegar a HomeActivity o LoginActivity
+                        Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finish();
+
+                    } else {
+                        String error = apiResponse.getError() != null ? apiResponse.getError() : "Error desconocido";
+                        Toast.makeText(RegisterActivity.this,
+                                "Error: " + error,
+                                Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Toast.makeText(RegisterActivity.this,
+                            "Error al registrar usuario (código: " + response.code() + ")",
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<User>> call, Throwable t) {
+                Toast.makeText(RegisterActivity.this,
+                        "Error de conexión: " + t.getMessage(),
+                        Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private boolean validarCampos() {
+        // Nombre
         if (etNombre.getText().toString().trim().isEmpty()) {
             etNombre.setError("Campo requerido");
             etNombre.requestFocus();
             return false;
         }
 
+        // Apellido
         if (etApellido.getText().toString().trim().isEmpty()) {
             etApellido.setError("Campo requerido");
             etApellido.requestFocus();
             return false;
         }
 
-        if (etEdad.getText().toString().trim().isEmpty()) {
-            etEdad.setError("Campo requerido");
-            etEdad.requestFocus();
+        // Email
+        if (etEmail.getText().toString().trim().isEmpty()) {
+            etEmail.setError("Campo requerido");
+            etEmail.requestFocus();
             return false;
         }
 
-        if (etDocumento.getText().toString().trim().isEmpty()) {
-            etDocumento.setError("Campo requerido");
-            etDocumento.requestFocus();
+        if (!Patterns.EMAIL_ADDRESS.matcher(etEmail.getText().toString().trim()).matches()) {
+            etEmail.setError("Email inválido");
+            etEmail.requestFocus();
             return false;
         }
 
+        // Teléfono
         if (etTelefono.getText().toString().trim().isEmpty()) {
             etTelefono.setError("Campo requerido");
             etTelefono.requestFocus();
             return false;
         }
 
+        // Password
         if (etPassword.getText().toString().trim().isEmpty()) {
             etPassword.setError("Campo requerido");
             etPassword.requestFocus();
@@ -221,6 +243,7 @@ public class RegisterActivity extends AppCompatActivity {
             return false;
         }
 
+        // Confirm Password
         if (etConfirmPassword.getText().toString().trim().isEmpty()) {
             etConfirmPassword.setError("Campo requerido");
             etConfirmPassword.requestFocus();
@@ -233,23 +256,13 @@ public class RegisterActivity extends AppCompatActivity {
             return false;
         }
 
-        if (etPesoActual.getText().toString().trim().isEmpty()) {
-            etPesoActual.setError("Campo requerido");
-            etPesoActual.requestFocus();
+        // Género
+        if (spGenero.getSelectedItemPosition() == 0) {
+            Toast.makeText(this, "Por favor selecciona un género", Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        if (etAltura.getText().toString().trim().isEmpty()) {
-            etAltura.setError("Campo requerido");
-            etAltura.requestFocus();
-            return false;
-        }
-
-        if (spObjetivo.getSelectedItemPosition() == 0) {
-            Toast.makeText(this, "Por favor selecciona un objetivo", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
+        // Fecha de Nacimiento
         if (etFechaNacimiento.getText().toString().trim().isEmpty()) {
             etFechaNacimiento.setError("Campo requerido");
             etFechaNacimiento.requestFocus();
@@ -257,76 +270,5 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         return true;
-    }
-
-    private void guardarUsuarioEnArchivo(JSONObject usuario) {
-        try {
-            JSONArray usuarios = leerUsuariosDelArchivo();
-            usuarios.put(usuario);
-
-            FileOutputStream fos = openFileOutput("data.json", MODE_PRIVATE);
-            fos.write(usuarios.toString().getBytes("UTF-8"));
-            fos.flush();
-            fos.close();
-
-            // Verificar que se guardó correctamente
-            Toast.makeText(this, "Datos guardados correctamente. Total usuarios: " + usuarios.length(),
-                Toast.LENGTH_SHORT).show();
-
-        } catch (IOException e) {
-            Toast.makeText(this, "Error al guardar los datos: " + e.getMessage(), Toast.LENGTH_LONG).show();
-            e.printStackTrace();
-        } catch (Exception e) {
-            Toast.makeText(this, "Error inesperado: " + e.getMessage(), Toast.LENGTH_LONG).show();
-            e.printStackTrace();
-        }
-    }
-
-    private JSONArray leerUsuariosDelArchivo() {
-        try {
-            FileInputStream fis = openFileInput("data.json");
-            int size = fis.available();
-            byte[] buffer = new byte[size];
-            fis.read(buffer);
-            fis.close();
-
-            String jsonString = new String(buffer, "UTF-8");
-            return new JSONArray(jsonString);
-
-        } catch (IOException | JSONException e) {
-            return new JSONArray();
-        }
-    }
-
-    private void limpiarFormulario() {
-        etNombre.setText("");
-        etApellido.setText("");
-        etEdad.setText("");
-        etDocumento.setText("");
-        etTelefono.setText("");
-        etPassword.setText("");
-        etConfirmPassword.setText("");
-        etPesoActual.setText("");
-        etAltura.setText("");
-        spObjetivo.setSelection(0);
-    }
-
-    // Método para verificar el contenido del archivo (solo para debug)
-    private void verificarContenidoArchivo() {
-        try {
-            FileInputStream fis = openFileInput("data.json");
-            int size = fis.available();
-            if (size > 0) {
-                byte[] buffer = new byte[size];
-                fis.read(buffer);
-                fis.close();
-                String content = new String(buffer, "UTF-8");
-                Toast.makeText(this, "Contenido: " + content, Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(this, "Archivo vacío", Toast.LENGTH_SHORT).show();
-            }
-        } catch (IOException e) {
-            Toast.makeText(this, "No se pudo leer el archivo: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
     }
 }

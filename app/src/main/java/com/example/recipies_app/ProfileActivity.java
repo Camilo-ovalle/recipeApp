@@ -11,6 +11,11 @@ public class ProfileActivity extends AppCompatActivity {
 
     private LinearLayout llMyRecipes;
     private LinearLayout llFavorites;
+    private LinearLayout llCategories;
+    private LinearLayout llShoppingList;
+    private LinearLayout llMealPlanner;
+    private LinearLayout llRecipeSteps;
+    private LinearLayout llCommunity;
     private LinearLayout llSettings;
     private LinearLayout llHelp;
     private LinearLayout llAbout;
@@ -30,6 +35,11 @@ public class ProfileActivity extends AppCompatActivity {
     private void initViews() {
         llMyRecipes = findViewById(R.id.ll_my_recipes);
         llFavorites = findViewById(R.id.ll_favorites);
+        llCategories = findViewById(R.id.ll_categories);
+        llShoppingList = findViewById(R.id.ll_shopping_list);
+        llMealPlanner = findViewById(R.id.ll_meal_planner);
+        llRecipeSteps = findViewById(R.id.ll_recipe_steps);
+        llCommunity = findViewById(R.id.ll_community);
         llSettings = findViewById(R.id.ll_settings);
         llHelp = findViewById(R.id.ll_help);
         llAbout = findViewById(R.id.ll_about);
@@ -76,6 +86,46 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ProfileActivity.this, FavoritesActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        llCategories.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfileActivity.this, CategoriesActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        llShoppingList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfileActivity.this, ShoppingListActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        llMealPlanner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfileActivity.this, MealPlannerActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        llRecipeSteps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfileActivity.this, RecipeStepsActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        llCommunity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfileActivity.this, CommunityActivity.class);
                 startActivity(intent);
             }
         });

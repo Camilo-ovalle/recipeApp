@@ -6,13 +6,25 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.recipies_app.api.ApiResponse;
+import com.example.recipies_app.api.RetrofitClient;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class MyRecipesActivity extends AppCompatActivity {
+
+    // TODO: Obtener userId desde login/sesión. Por ahora usamos userId=1 (María García)
+    private static final int CURRENT_USER_ID = 1;
 
     private ImageView ivBack;
     private TextView tvEmptyState;
@@ -66,55 +78,57 @@ public class MyRecipesActivity extends AppCompatActivity {
     }
 
     private void loadMyRecipes() {
-        // Solo cargar recetas de ejemplo si no hay una receta nueva
-        Intent intent = getIntent();
-        if (intent == null || !intent.getBooleanExtra("is_new_recipe", false)) {
-            // Simulamos algunas recetas del usuario
-            myRecipesList.add(new Recipe(
-                "Pasta Carbonara",
-                "Una deliciosa pasta italiana con huevo y panceta",
-                "30 min",
-                "450 cal",
-                "ic_pasta",
-                true
-            ));
+        // Cargar recetas del usuario desde la API
+        Call<ApiResponse<List<Recipe>>> call = RetrofitClient.getInstance()
+                .getApiService()
+                .getRecipesByUser(CURRENT_USER_ID);
 
-            myRecipesList.add(new Recipe(
-                "Ensalada César",
-                "Ensalada fresca con pollo y aderezo césar",
-                "15 min",
-                "320 cal",
-                "ic_salad",
-                true
-            ));
+        call.enqueue(new Callback<ApiResponse<List<Recipe>>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<List<Recipe>>> call, Response<ApiResponse<List<Recipe>>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    ApiResponse<List<Recipe>> apiResponse = response.body();
 
-            myRecipesList.add(new Recipe(
-                "Salmón a la Plancha",
-                "Salmón fresco con verduras al vapor",
-                "25 min",
-                "380 cal",
-                "ic_fish",
-                true
-            ));
+                    if (apiResponse.isSuccess() && apiResponse.getData() != null) {
+                        // Limpiar lista actual
+                        myRecipesList.clear();
+                        // Agregar recetas de la API
+                        myRecipesList.addAll(apiResponse.getData());
 
-            myRecipesList.add(new Recipe(
-                "Smoothie Verde",
-                "Batido saludable con espinaca y frutas",
-                "5 min",
-                "180 cal",
-                "ic_smoothie",
-                true
-            ));
-        }
+                        // Verificar si la lista está vacía
+                        if (myRecipesList.isEmpty()) {
+                            tvEmptyState.setVisibility(View.VISIBLE);
+                            rvMyRecipes.setVisibility(View.GONE);
+                        } else {
+                            tvEmptyState.setVisibility(View.GONE);
+                            rvMyRecipes.setVisibility(View.VISIBLE);
+                            adapter.notifyDataSetChanged();
+                        }
+                    } else {
+                        tvEmptyState.setVisibility(View.VISIBLE);
+                        rvMyRecipes.setVisibility(View.GONE);
+                        Toast.makeText(MyRecipesActivity.this,
+                                "Error: " + apiResponse.getError(),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    tvEmptyState.setVisibility(View.VISIBLE);
+                    rvMyRecipes.setVisibility(View.GONE);
+                    Toast.makeText(MyRecipesActivity.this,
+                            "Error al cargar recetas",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
 
-        if (myRecipesList.isEmpty()) {
-            tvEmptyState.setVisibility(View.VISIBLE);
-            rvMyRecipes.setVisibility(View.GONE);
-        } else {
-            tvEmptyState.setVisibility(View.GONE);
-            rvMyRecipes.setVisibility(View.VISIBLE);
-            adapter.notifyDataSetChanged();
-        }
+            @Override
+            public void onFailure(Call<ApiResponse<List<Recipe>>> call, Throwable t) {
+                tvEmptyState.setVisibility(View.VISIBLE);
+                rvMyRecipes.setVisibility(View.GONE);
+                Toast.makeText(MyRecipesActivity.this,
+                        "Error de conexión: " + t.getMessage(),
+                        Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void checkForNewRecipe() {

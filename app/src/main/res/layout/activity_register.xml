@@ -50,11 +50,11 @@
             android:padding="24dp"
             android:layout_marginBottom="24dp">
 
-            <!-- Datos Personales -->
+            <!-- Información Personal -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Datos Personales"
+                android:text="Información Personal"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="@color/primary_orange"
@@ -96,50 +96,23 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Fila Edad y Documento -->
-            <LinearLayout
+            <!-- Email -->
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="16dp"
+                android:hint="Email"
+                app:boxStrokeColor="@color/primary_orange"
+                app:hintTextColor="@color/primary_orange">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="0dp"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_email"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="8dp"
-                    android:hint="Edad"
-                    app:boxStrokeColor="@color/primary_orange"
-                    app:hintTextColor="@color/primary_orange">
+                    android:inputType="textEmailAddress"
+                    android:textColor="@color/text_primary" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/et_edad"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="number"
-                        android:textColor="@color/text_primary" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:layout_marginStart="8dp"
-                    android:hint="Documento"
-                    app:boxStrokeColor="@color/primary_orange"
-                    app:hintTextColor="@color/primary_orange">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/et_documento"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="number"
-                        android:textColor="@color/text_primary" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </LinearLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Teléfono -->
             <com.google.android.material.textfield.TextInputLayout
@@ -182,7 +155,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
+                android:layout_marginBottom="16dp"
                 android:hint="Confirmar Contraseña"
                 app:boxStrokeColor="@color/primary_orange"
                 app:hintTextColor="@color/primary_orange"
@@ -197,72 +170,17 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Datos Físicos -->
+            <!-- Género -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Datos Físicos"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@color/primary_orange"
-                android:layout_marginBottom="16dp" />
-
-            <!-- Fila Peso y Altura -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="16dp">
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="8dp"
-                    android:hint="Peso Actual (kg)"
-                    app:boxStrokeColor="@color/primary_orange"
-                    app:hintTextColor="@color/primary_orange">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/et_peso_actual"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="numberDecimal"
-                        android:textColor="@color/text_primary" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="8dp"
-                    android:hint="Altura (cm)"
-                    app:boxStrokeColor="@color/primary_orange"
-                    app:hintTextColor="@color/primary_orange">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/et_altura"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="numberDecimal"
-                        android:textColor="@color/text_primary" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </LinearLayout>
-
-            <!-- Objetivo -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Objetivo"
+                android:text="Género"
                 android:textSize="16sp"
                 android:textColor="@color/text_primary"
                 android:layout_marginBottom="8dp" />
 
             <Spinner
-                android:id="@+id/sp_objetivo"
+                android:id="@+id/sp_genero"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:background="@drawable/spinner_background"
@@ -286,7 +204,7 @@
                 app:boxStrokeColor="@color/primary_orange"
                 app:hintTextColor="@color/primary_orange"
                 app:endIconMode="custom"
-                app:endIconDrawable="@drawable/ic_info">
+                app:endIconDrawable="@drawable/ic_calendar">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_fecha_nacimiento"

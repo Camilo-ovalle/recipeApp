@@ -31,15 +31,15 @@ public class MyRecipesAdapter extends RecyclerView.Adapter<MyRecipesAdapter.Reci
     @Override
     public void onBindViewHolder(@NonNull RecipeViewHolder holder, int position) {
         Recipe recipe = recipeList.get(position);
-        
+
         holder.tvRecipeName.setText(recipe.getName());
         holder.tvRecipeDescription.setText(recipe.getDescription());
         holder.tvCookTime.setText(recipe.getCookTime());
-        holder.tvCalories.setText(recipe.getCalories());
-        
+        holder.tvCalories.setText(recipe.getCaloriesString() + " cal");
+
         // Por ahora usamos un icono por defecto, más adelante se puede mejorar
         holder.ivRecipeIcon.setImageResource(R.drawable.ic_recipe_book);
-        
+
         // Mostrar badge de "Mi receta" si es del usuario
         if (recipe.isUserRecipe()) {
             holder.tvUserBadge.setVisibility(View.VISIBLE);
@@ -52,10 +52,11 @@ public class MyRecipesAdapter extends RecyclerView.Adapter<MyRecipesAdapter.Reci
             public void onClick(View v) {
                 // Navegar a detalle de receta
                 Intent intent = new Intent(context, RecipeDetailActivity.class);
+                intent.putExtra("recipe_id", recipe.getId());
                 intent.putExtra("recipe_name", recipe.getName());
                 intent.putExtra("recipe_description", recipe.getDescription());
                 intent.putExtra("cook_time", recipe.getCookTime());
-                intent.putExtra("calories", recipe.getCalories());
+                intent.putExtra("calories", recipe.getCaloriesString());
                 context.startActivity(intent);
             }
         });

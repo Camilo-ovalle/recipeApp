@@ -35,6 +35,37 @@
                 android:clickable="true"
                 android:focusable="true" />
 
+            <!-- Botones de acción (favorito y compartir) -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="16dp">
+
+                <ImageView
+                    android:id="@+id/iv_favorite"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_favorite_outline"
+                    android:background="@drawable/circle_white"
+                    android:padding="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:clickable="true"
+                    android:focusable="true" />
+
+                <ImageView
+                    android:id="@+id/iv_share"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_share"
+                    android:background="@drawable/circle_white"
+                    android:padding="8dp"
+                    android:clickable="true"
+                    android:focusable="true" />
+
+            </LinearLayout>
+
         </RelativeLayout>
 
         <!-- Contenido de la receta -->
@@ -55,42 +86,44 @@
                 android:textColor="@color/text_primary"
                 android:layout_marginBottom="16dp" />
 
-            <!-- Información básica (tiempo y calorías) -->
+            <!-- Información básica (tiempo, calorías y dificultad) -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="24dp">
+                android:layout_marginBottom="24dp"
+                android:weightSum="3">
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="12dp"
+                    android:background="@drawable/background_card">
 
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:src="@drawable/ic_time"
-                        android:layout_marginEnd="8dp" />
+                        android:layout_marginBottom="4dp" />
 
                     <TextView
                         android:id="@+id/tv_cook_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="X min"
-                        android:textColor="@color/text_secondary"
+                        android:text="30 min"
+                        android:textColor="@color/text_primary"
+                        android:textStyle="bold"
                         android:textSize="14sp" />
 
                     <TextView
-                        android:id="@+id/tv_cook_time2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="min"
+                        android:text="Tiempo"
                         android:textColor="@color/text_secondary"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
 
                 </LinearLayout>
 
@@ -98,14 +131,18 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="12dp"
+                    android:background="@drawable/background_card"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp">
 
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:src="@drawable/ic_calories"
-                        android:layout_marginEnd="8dp" />
+                        android:layout_marginBottom="4dp" />
 
                     <TextView
                         android:id="@+id/tv_calories"
@@ -113,7 +150,48 @@
                         android:layout_height="wrap_content"
                         android:text="450 cal"
                         android:textSize="14sp"
-                        android:textColor="@color/text_secondary" />
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Calorías"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="12dp"
+                    android:background="@drawable/background_card">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_info"
+                        android:layout_marginBottom="4dp" />
+
+                    <TextView
+                        android:id="@+id/tv_difficulty"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Fácil"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Dificultad"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="12sp" />
 
                 </LinearLayout>
 
@@ -139,41 +217,55 @@
                 android:lineSpacingExtra="4dp"
                 android:layout_marginBottom="24dp" />
 
-            <!-- Alimentos -->
+            <!-- Ingredientes -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Alimentos"
+                android:text="Ingredientes"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="@color/text_primary"
                 android:layout_marginBottom="12dp" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_food_items_detail"
+                android:id="@+id/rv_ingredients"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false"
                 android:layout_marginBottom="24dp" />
 
-            <!-- Categorías -->
+            <!-- Categoría -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Categorías"
+                android:text="Categoría"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="@color/text_primary"
                 android:layout_marginBottom="12dp" />
 
             <TextView
-                android:id="@+id/tv_categories"
+                android:id="@+id/tv_category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Desayuno, Almuerzo"
+                android:text="Desayuno"
                 android:textSize="16sp"
                 android:textColor="@color/primary_orange"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_marginBottom="32dp" />
+
+            <!-- Botón Ver Pasos de Preparación -->
+            <Button
+                android:id="@+id/btn_view_steps"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="Ver Pasos de Preparación"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:background="@drawable/button_primary_orange"
+                android:elevation="4dp"
+                android:layout_marginBottom="16dp" />
 
         </LinearLayout>
 
